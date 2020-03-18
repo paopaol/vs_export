@@ -6,7 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"sln"
+	"vs_export/sln"
 )
 
 func main() {
