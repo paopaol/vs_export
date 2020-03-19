@@ -1,12 +1,12 @@
 package main
 
 import (
-	//"awesomeProject/src/github.com/gin-gonic/gin/json"
     "encoding/json"
 	"flag"
 	"fmt"
 	"os"
 	"vs_export/sln"
+	"io/ioutil"
 )
 
 func main() {
@@ -36,6 +36,7 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Printf("%s\n", js[:])
+	ioutil.WriteFile("compile_commands.json", js[:], 0644)
 }
 
 
