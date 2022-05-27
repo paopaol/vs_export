@@ -2,13 +2,13 @@ package sln
 
 import (
 	"encoding/xml"
-	"path/filepath"
-	"os"
-	"io/ioutil"
-	"strings"
-	"fmt"
 	"errors"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 type Project struct {
@@ -55,14 +55,14 @@ type CompileCommand struct {
 	File string `json:"file"`
 }
 
-
 var badInclude = []string{
 	";%(AdditionalIncludeDirectories)",
+	"%(AdditionalIncludeDirectories);",
 }
 var badDef = []string{
 	";%(PreprocessorDefinitions)",
+	"%(PreprocessorDefinitions);",
 }
-
 
 func NewProject(path string) (Project, error) {
 	var pro Project
@@ -86,7 +86,6 @@ func NewProject(path string) (Project, error) {
 	}
 	return pro, nil
 }
-
 
 //return include, definition,error
 func (pro *Project) FindConfig(conf string) (string, string, error) {
@@ -120,12 +119,12 @@ func (pro *Project) FindConfig(conf string) (string, string, error) {
 			platform := vlist[1]
 
 			willReplaceEnv := map[string]string{
-				"$(ProjectDir)":    pro.ProjectDir,
-				"$(Configuration)": configuration,
+				"$(ProjectDir)":        pro.ProjectDir,
+				"$(Configuration)":     configuration,
 				"$(ConfigurationName)": configuration,
-				"$(Platform)":      platform,
+				"$(Platform)":          platform,
 			}
-			for _,v := range os.Environ(){
+			for _, v := range os.Environ() {
 				kv := strings.Split(v, "=")
 				willReplaceEnv[fmt.Sprintf("$(%s)", kv[0])] = kv[1]
 			}
@@ -162,7 +161,6 @@ func (pro *Project) FindSourceFiles() []string {
 	}
 	return fileList
 }
-
 
 func RemoveBadInclude(include string) string {
 	for _, bad := range badInclude {

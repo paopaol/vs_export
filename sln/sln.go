@@ -1,20 +1,19 @@
 package sln
 
 import (
-	"path/filepath"
-	"os"
-	"io/ioutil"
-	"strings"
-	"fmt"
 	"errors"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 type Sln struct {
 	SolutionDir string
 	ProjectList []Project
 }
-
 
 func NewSln(path string) (Sln, error) {
 	var sln Sln
@@ -66,8 +65,6 @@ func findAllProject(path string) ([]string, error) {
 	return list, nil
 }
 
-
-
 func (sln *Sln) CompileCommandsJson(conf string) ([]CompileCommand, error) {
 	var cmdList []CompileCommand
 
@@ -91,17 +88,12 @@ func (sln *Sln) CompileCommandsJson(conf string) ([]CompileCommand, error) {
 				}
 			}
 			def = RemoveBadDefinition(def)
-			def = strings.Replace(def, ";", " -D", -1)
-			inc = RemoveBadInclude(inc)
-			inc = strings.Replace(inc, ";", " -I", -1)
-			if len(inc) > 0{
-				inc = " -I" + inc
-			}
-			if len(def) > 0{
-				def = " -D" + def
-			}
+			def = preappend(def, "-D")
 
-			cmd := "clang-cl.exe" + def + inc + " -c " + f
+			inc = RemoveBadInclude(inc)
+			inc = preappend(inc, "-I")
+
+			cmd := "clang-cl.exe " + def + " " + inc + " -c " + f
 			item.Cmd = cmd
 
 			cmdList = append(cmdList, item)
@@ -111,3 +103,13 @@ func (sln *Sln) CompileCommandsJson(conf string) ([]CompileCommand, error) {
 	return cmdList, nil
 }
 
+func preappend(sepedString string, append string) string {
+	defList := strings.Split(sepedString, ";")
+	var output string
+
+	for _, v := range defList {
+		v = append + v + " "
+		output += v
+	}
+	return output
+}
