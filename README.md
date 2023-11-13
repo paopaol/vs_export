@@ -3,10 +3,12 @@
 read visual studio 15/17/19/22 sln file,export clang compile_commands.json
 
 ```cmd
-usage:vs_export options
-           -s   path                        sln filename
-           -c   configuration               project configuration,eg Debug|Win32.
-                                            default Debug|Win32
+Usage: vs_export -s <path> -c <configuration>
+
+Where:
+            -s   path                        sln filename
+            -c   configuration               project configuration,eg Debug|Win32.
+                                             default Debug|Win32
 ```
 
 ## example
