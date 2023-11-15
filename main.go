@@ -7,6 +7,7 @@ import (
 	"os"
 	"vs_export/sln"
 	"io/ioutil"
+    "path/filepath"
 )
 
 func main() {
@@ -41,10 +42,13 @@ func main() {
 
 
 func usage() {
-	echo := `usage:sln_export_compile_commands options
-			 -s   path                        sln filename
-           -c   configuration               project configuration,eg Debug|Win32.
-                                            default Debug|Win32
+	var echo = `Usage: %s -s <path> -c <configuration>
+
+Where:
+            -s   path                        sln filename
+            -c   configuration               project configuration,eg Debug|Win32.
+                                             default Debug|Win32
 	`
-	fmt.Println(echo)
+	echo = fmt.Sprintf(echo, filepath.Base(os.Args[0]))
+    fmt.Println(echo)
 }
